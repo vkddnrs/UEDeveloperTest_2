@@ -2,6 +2,7 @@
 
 
 #include "Turtle.h"
+//#include "Components/SphereComponent.h"
 
 // Sets default values
 ATurtle::ATurtle()
@@ -9,19 +10,24 @@ ATurtle::ATurtle()
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	Mesh = CreateDefaultSubobject<UStaticMeshComponent>("Mesh");
+	RootComponent = Mesh;
+
 }
 
 // Called when the game starts or when spawned
 void ATurtle::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 }
 
 // Called every frame
 void ATurtle::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	if (!IsFinish)
+		MoveToAimPoint();
 
 }
 
@@ -33,4 +39,33 @@ void ATurtle::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 }
 
 void ATurtle::MoveToAimPoint()
-{}
+{
+	Mesh->AddWorldOffset(direction * Speed);
+}
+
+void ATurtle::SetUp(AActor* spawn_point, AActor* aim_point)
+{
+	if (AimPointActor == nullptr)
+		AimPointActor = aim_point;
+
+	if (SpawnPointActor == nullptr)
+		SpawnPointActor = spawn_point;
+	
+	if (AimPointActor != nullptr)
+		AimPoint = AimPointActor->GetActorLocation();
+
+	if (SpawnPointActor != nullptr)
+		SpawnPoint = SpawnPointActor->GetActorLocation();
+	
+	direction = AimPoint - SpawnPoint;
+	direction = direction.GetSafeNormal2D();
+	FVector forward_vector = Mesh->GetForwardVector();
+	FQuat bq = FQuat::FindBetweenVectors(forward_vector, direction);
+	float angle;
+	FVector axis;
+	bq.ToAxisAndAngle(axis, angle);
+	angle = FMath::RadiansToDegrees(angle);
+	FRotator rotator = forward_vector.RotateAngleAxis(angle, axis).Rotation();
+	Mesh->SetWorldLocationAndRotation(SpawnPoint, rotator);
+
+}
