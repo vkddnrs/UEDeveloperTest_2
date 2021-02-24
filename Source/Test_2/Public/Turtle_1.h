@@ -14,8 +14,10 @@ class TEST_2_API ATurtle_1 : public ATurtle
 {
 	GENERATED_BODY()
 
-	public:
-		UFUNCTION(BlueprintCallable, Category = "Move")
-		void MoveToAimPoint() override;
-	
+public:	
+	UFUNCTION(BlueprintCallable, Category = "Move")
+	void MoveToAimPoint() override;
+
+//protected:
+//	virtual void BeginPlay() override;
 };

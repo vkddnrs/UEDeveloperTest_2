@@ -2,7 +2,9 @@
 
 
 #include "Turtle.h"
-//#include "Components/SphereComponent.h"
+
+#include "Kismet/GameplayStatics.h"
+
 
 // Sets default values
 ATurtle::ATurtle()
@@ -20,6 +22,15 @@ void ATurtle::BeginPlay()
 {
 	Super::BeginPlay();
 
+	static;
+	SoundMovingStep_1 = SoundMovingPtr_1.Get();
+	SoundMovingStep_2 = SoundMovingPtr_2.Get();
+	AudioPlayerMovingStep_1 = UGameplayStatics::SpawnSound2D(this, SoundMovingStep_1);
+	AudioPlayerMovingStep_2 = UGameplayStatics::SpawnSound2D(this, SoundMovingStep_2);
+	AudioPlayerMovingStep_1->Activate(true);
+
+	
+	
 }
 
 // Called every frame

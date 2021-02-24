@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
+#include "Components/AudioComponent.h"
+#include "Sound/SoundCue.h"
 #include "VectorField/VectorField.h"
 
 #include "Turtle.generated.h"
@@ -21,6 +23,12 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	// sound
+	USoundCue* SoundMovingStep_1;
+	USoundCue* SoundMovingStep_2;
+	USoundCue* SoundCueFX;
+	USoundCue* SoundCueAmbience; // replace to GameMode
 
 public:	
 	// Called every frame
@@ -53,7 +61,28 @@ protected:
 	UPROPERTY(BlueprintReadWrite, Category = "Move")
 	bool IsFinish = false;
 
+	UPROPERTY(EditAnywhere, Category = "Sound")
+	float VolumeMoving;
+
+	UPROPERTY(EditAnywhere, Category = "Sound")
+	float VolumeFX;
+
+	UPROPERTY(EditAnywhere, Category = "Sound")
+	float VolumeAmbience; // replace to GameMode
+
 	FVector direction;
+
+	UAudioComponent* AudioPlayerMovingStep_1;
+	UAudioComponent* AudioPlayerMovingStep_2;
+
+public:
+	UPROPERTY(EditDefaultsOnly, Category = "Sound/Building")
+	TAssetPtr<USoundCue> SoundMovingPtr_1;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Sound/Building")
+	TAssetPtr<USoundCue> SoundMovingPtr_2;
+
+	
 
 public:
 	// Эти переменные к сожалению не удалось пока сделать способными в блюпринтах инициализироваться прямо из уровня
