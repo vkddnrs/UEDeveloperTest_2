@@ -18,6 +18,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Move")
 	void MoveToAimPoint() override;
 
-//protected:
-//	virtual void BeginPlay() override;
+protected:
+	void BeginPlay() override;
+
 };

@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Pawn.h"
+#include "GameFramework/Actor.h"
 #include "Components/AudioComponent.h"
 #include "Sound/SoundCue.h"
 #include "VectorField/VectorField.h"
@@ -11,8 +11,8 @@
 #include "Turtle.generated.h"
 
 UCLASS()
-class TEST_2_API ATurtle : public APawn
-// наследовался от Павна, а не от Актора для перестраховки - вдруг понадобятся  еще и фишки Павна
+class TEST_2_API ATurtle : public AActor
+
 {
 	GENERATED_BODY()
 
@@ -24,28 +24,19 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	// sound
-	USoundCue* SoundMovingStep_1;
-	USoundCue* SoundMovingStep_2;
-	USoundCue* SoundCueFX;
-	USoundCue* SoundCueAmbience; // replace to GameMode
-
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	
 	virtual void MoveToAimPoint();
 
 	UFUNCTION(BlueprintCallable, Category = "SetUp")
 	void SetUp(AActor* spawn_point, AActor* aim_point);
-	
+
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
 protected:	
-	
 	UPROPERTY(EditAnywhere, Category = "Mesh")
 	UStaticMeshComponent* Mesh;
 	
@@ -64,33 +55,23 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Sound")
 	float VolumeMoving;
 
-	UPROPERTY(EditAnywhere, Category = "Sound")
-	float VolumeFX;
-
-	UPROPERTY(EditAnywhere, Category = "Sound")
-	float VolumeAmbience; // replace to GameMode
-
 	FVector direction;
 
-	UAudioComponent* AudioPlayerMovingStep_1;
-	UAudioComponent* AudioPlayerMovingStep_2;
+	USoundCue* SoundMoving;
+	UAudioComponent* AudioPlayerMoving;
 
-public:
-	UPROPERTY(EditDefaultsOnly, Category = "Sound/Building")
-	TAssetPtr<USoundCue> SoundMovingPtr_1;
-	
-	UPROPERTY(EditDefaultsOnly, Category = "Sound/Building")
-	TAssetPtr<USoundCue> SoundMovingPtr_2;
-
+	AActor* FXSpawn;
+	AActor* FXDisappearance;
 	
 
 public:
-	// Эти переменные к сожалению не удалось пока сделать способными в блюпринтах инициализироваться прямо из уровня
-	// пока не понимаю, почему. Пришлось пойти обходным путем и назначать их из блюпринта виджета с кнопками.
-	UPROPERTY(EditAnywhere, Category = "Building")
-	AActor* SpawnPointActor;
+	UPROPERTY(EditDefaultsOnly, Category = "Sound/Building")
+	TAssetPtr<USoundCue> SoundMovingPtr;
 
-	UPROPERTY(EditAnywhere, Category = "Building")
-	AActor* AimPointActor;
+	UPROPERTY(EditDefaultsOnly, Category = "Building")
+	TAssetPtr<AActor> SpawnPointActorPtr;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Building")
+	TAssetPtr<AActor> AimPointActorPtr;	
 	
 };

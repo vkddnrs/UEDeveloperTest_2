@@ -3,9 +3,9 @@
 
 #include "Turtle_3.h"
 
-void ATurtle_3::MoveToAimPoint()
+void ATurtle_3::BeginPlay()
 {
-	Super::MoveToAimPoint();
+	Super::BeginPlay();
 }
 
 void ATurtle_3::Tick(float DeltaTime)
@@ -29,4 +29,10 @@ void ATurtle_3::Tick(float DeltaTime)
 		time = 0.0;
 		Speed = -Speed;
 	}
+}
+
+
+void ATurtle_3::MoveToAimPoint()
+{
+	Super::MoveToAimPoint();
 }

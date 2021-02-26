@@ -22,6 +22,8 @@ public:
 	void MoveToAimPoint() override;
 
 protected:
+	void BeginPlay() override;
+	
 	UPROPERTY(EditAnywhere, Category="Time")
 	float TimeMove = 1.0;
 
